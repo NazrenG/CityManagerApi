@@ -26,30 +26,38 @@ namespace CityManagerApi.Data.Concretes
             });
         }
 
-        public async Task<List<City>> GetCityByUserIdAsync(int userId)
+        public async Task<List<City>> GetCitiesAsync(int userId)
         {
-            return await _context.Cities.Include(i=>i.Images).Where(c=>c.UserId==userId).ToListAsync();
+            var cities = await _context
+                .Cities
+                .Include(c => c.CityImages)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+            return cities;
         }
 
         public async Task<City> GetCityByIdAsync(int cityId)
         {
-           return await _context.Cities
-                .Include(i=>i.Images)
-                .FirstOrDefaultAsync(c=>c.Equals(cityId));
-
+            var city = await _context
+                .Cities
+                .Include(c => c.CityImages)
+                .FirstOrDefaultAsync(c => c.Id == cityId);
+            return city;
         }
 
-        public async Task<CityImage> GetCityImageByCityIdAsync(int cityId)
+        public async Task<CityImage> GetPhotoByCityIdAsync(int cityId)
         {
-            return await _context.Images.Include(c=>c.City).FirstOrDefaultAsync(p=>p.CityId==cityId);
+            var img = await _context.CityImages.Include(c=>c.City).FirstOrDefaultAsync(c => c.Id == cityId);
+            return img;
         }
 
-        public async Task<CityImage> GetCityImageByIdAsync(int id)
+        public async Task<CityImage> GetPhotoByIdAsync(int photoId)
         {
-            return await _context.Images.Include(c => c.City).FirstOrDefaultAsync(i => i.Id == id);
+            var img = await _context.CityImages.FirstOrDefaultAsync(c => c.Id==photoId);
+            return img;
         }
 
-        public async Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveAllAsync()
         {
             return await Task.Run(async () =>
             {

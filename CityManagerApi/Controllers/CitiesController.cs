@@ -2,12 +2,14 @@
 using CityManagerApi.Data.Abstract;
 using CityManagerApi.Dtos;
 using CityManagerApi.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CityManagerApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CitiesController : ControllerBase
@@ -32,21 +34,27 @@ namespace CityManagerApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var item=await _appRepository.GetCityByIdAsync(id);
+            var item=await _appRepository.GetCitiesAsync(id);
 
             var dtos= _mapper.Map<IEnumerable<CityForListDto>>(item);
             return Ok(dtos);
+
+
+             
         }
 
         // POST api/<CitiesController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CityDto value)
         {
-            _mapper.Map<City>(value);
-          await  _appRepository.SaveChangesAsync();
-            await _appRepository.AddAsync(value);
-          
-            return Ok(  _mapper.Map<CityDto>(value));
+
+            var entity = _mapper.Map<City>(value);
+            await _appRepository.AddAsync(entity);
+            await _appRepository.SaveAllAsync();
+            var returnedDto = _mapper.Map<CityDto>(entity);
+            return Ok(returnedDto);
+
+             
 
         }
 

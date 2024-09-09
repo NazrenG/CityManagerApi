@@ -9,7 +9,7 @@ namespace CityManagerApi.Data
         {
         }
         public DbSet<City> Cities { get; set; }
-        public DbSet<CityImage> Images { get; set; }
+        public DbSet<CityImage> CityImages { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }

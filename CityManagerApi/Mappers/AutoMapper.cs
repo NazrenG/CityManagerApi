@@ -12,7 +12,7 @@ namespace CityManagerApi.Mappers
 
             CreateMap<City, CityForListDto>().ForMember(p => p.PhotUrl, opt =>
             {
-                opt.MapFrom(i => i.Images.FirstOrDefault(m => m.IsMain).Url);
+                opt.MapFrom(i => i.CityImages.FirstOrDefault(m => m.IsMain).Url);
             });
         }
     }

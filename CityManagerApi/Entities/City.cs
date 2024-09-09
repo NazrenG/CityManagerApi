@@ -9,7 +9,7 @@
         public User? User { get; set; }
         public int UserId { get; set; }
         //one -to many
-        public ICollection<CityImage>? Images { get; set; }
+        public ICollection<CityImage>? CityImages { get; set; }
 
     }
 }
